@@ -79,11 +79,14 @@ class _RegisterState extends State<Register> {
                   if (_formKey.currentState.validate()) {
                     // print(email);
                     // print(password);
+
                     dynamic result = await _auth.registerWithEnailAndPassword(
-                        email, password);
+                      email,
+                      password,
+                    );
                     if (result == null) {
                       setState(() => error = 'please supply a valid email');
-                    } else {}
+                    }
                   }
                 },
               ),
