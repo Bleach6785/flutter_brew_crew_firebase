@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_brew_crew_firebase/services/auth.dart';
 import 'package:flutter_brew_crew_firebase/shared/constants.dart';
+import 'package:flutter_brew_crew_firebase/shared/loading.dart';
 
 class SignIn extends StatefulWidget {
   final Function toggleView;
@@ -13,6 +14,7 @@ class SignIn extends StatefulWidget {
 class _SignInState extends State<SignIn> {
   final AuthService _auth = AuthService();
   final _formKey = GlobalKey<FormState>();
+  bool loading = false;
 
   // text field state
   String email = '';
@@ -21,7 +23,7 @@ class _SignInState extends State<SignIn> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return loading ? Loading() : Scaffold(
       backgroundColor: Colors.brown[100],
       appBar: AppBar(
         backgroundColor: Colors.brown[400],
@@ -86,13 +88,16 @@ class _SignInState extends State<SignIn> {
                   if (_formKey.currentState.validate()) {
                     // print(email);
                     // print(password);
+                    setState(() => loading = true);
                     dynamic result = await _auth.signInWithEnailAndPassword(
                       email,
                       password,
                     );
                     if (result == null) {
-                      setState(() =>
-                          error = 'could not sign in with those cedentials');
+                      setState(() {
+                        error = 'could not sign in with those cedentials';
+                        loading = false;
+                      });
                     }
                   }
                 },
